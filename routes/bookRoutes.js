@@ -1,9 +1,10 @@
+// routes/bookRoutes.js
 import express from "express";
 import Book from "../models/bookModel.js";
 
 const router = express.Router();
 
-// POST route to add a new book
+// POST /api/books/add
 router.post("/add", async (req, res) => {
   try {
     const { title, author, genre, publishedDate } = req.body;
@@ -22,7 +23,7 @@ router.post("/add", async (req, res) => {
       book: newBook,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(400).json({
       message: "Error adding book",
       error: error.message,
     });

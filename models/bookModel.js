@@ -1,17 +1,25 @@
 // models/bookModel.js
 import mongoose from "mongoose";
 
-const bookSchema = new mongoose.Schema(
-  {
-    title: { type: String, required: true },
-    author: { type: String, required: true },
-    genre: { type: String, required: true },
-    publishedDate: { type: Date, required: true },
+const bookSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: [true, "Title is required"],
   },
-  { timestamps: true } // createdAt & updatedAt auto add ho jayega
-);
+  author: {
+    type: String,
+    required: [true, "Author is required"],
+  },
+  genre: {
+    type: String,
+    required: [true, "Genre is required"],
+  },
+  publishedDate: {
+    type: Date,
+    required: [true, "Published date is required"],
+  },
+});
 
-// ✅ Model create & export
 const Book = mongoose.model("Book", bookSchema);
 
 export default Book;

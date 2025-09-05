@@ -12,3 +12,6 @@ yarn-error.log*
 # OS files
 .DS_Store
 Thumbs.db
+git add .gitignore
+git commit -m "Added .gitignore file"
+git push
