@@ -1,32 +1,37 @@
-// routes/bookRoutes.js
 import express from "express";
 import Book from "../models/bookModel.js";
 
 const router = express.Router();
 
-// POST /api/books/add
-router.post("/add", async (req, res) => {
+// ✅ GET route with pagination
+router.get("/", async (req, res) => {
   try {
-    const { title, author, genre, publishedDate } = req.body;
+    // Query params se page aur limit lo (default: page=1, limit=10)
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
 
-    const newBook = new Book({
-      title,
-      author,
-      genre,
-      publishedDate,
-    });
+    // Skip calculate karo
+    const skip = (page - 1) * limit;
 
-    await newBook.save();
+    // Books fetch with pagination
+    const books = await Book.find().skip(skip).limit(limit);
 
-    res.status(201).json({
-      message: "Book added successfully",
-      book: newBook,
+    // Total books count
+    const totalBooks = await Book.countDocuments();
+    const totalPages = Math.ceil(totalBooks / limit);
+
+    res.status(200).json({
+      books,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalBooks,
+      },
     });
   } catch (error) {
-    res.status(400).json({
-      message: "Error adding book",
-      error: error.message,
-    });
+    res
+      .status(500)
+      .json({ message: "Error fetching books", error: error.message });
   }
 });
 
