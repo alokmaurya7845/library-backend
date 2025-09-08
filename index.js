@@ -11,7 +11,7 @@ app.use(cors());
 // ✅ Use book routes
 app.use("/api/books", bookRoutes);
 
-app.get("/", (req, res) => res.send("Welcome to MERN Backend 🚀"));
+app.get("/", (req, res) => res.send("Welcome to MERN Backend 🚀 _LIBRARY-BACKEND"));
 
 const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/libraryDB";
 
