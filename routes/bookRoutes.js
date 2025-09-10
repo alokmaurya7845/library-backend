@@ -3,7 +3,7 @@ import Book from "../models/bookModel.js";
 
 const router = express.Router();
 
-// ✅ GET route with pagination
+//  GET route with pagination
 router.get("/", async (req, res) => {
   try {
     // Query params se page aur limit lo (default: page=1, limit=10)
