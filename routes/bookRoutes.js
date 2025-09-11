@@ -1,37 +1,30 @@
 import express from "express";
+import mongoose from "mongoose";
 import Book from "../models/bookModel.js";
 
 const router = express.Router();
 
-//  GET route with pagination
-router.get("/", async (req, res) => {
+// ✅ Fetch a single book by ID
+router.get("/:id", async (req, res) => {
   try {
-    // Query params se page aur limit lo (default: page=1, limit=10)
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const { id } = req.params;
 
-    // Skip calculate karo
-    const skip = (page - 1) * limit;
+    // check if ObjectId is valid
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid book ID" });
+    }
 
-    // Books fetch with pagination
-    const books = await Book.find().skip(skip).limit(limit);
+    const book = await Book.findById(id);
 
-    // Total books count
-    const totalBooks = await Book.countDocuments();
-    const totalPages = Math.ceil(totalBooks / limit);
+    if (!book) {
+      return res.status(404).json({ message: "Book not found" });
+    }
 
-    res.status(200).json({
-      books,
-      pagination: {
-        currentPage: page,
-        totalPages,
-        totalBooks,
-      },
-    });
+    res.status(200).json(book);
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Error fetching books", error: error.message });
+      .json({ message: "Error fetching book", error: error.message });
   }
 });
 
